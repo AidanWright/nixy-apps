@@ -36,18 +36,19 @@ nix build github:aidanwright/nixy-apps#cryptomator
 
 ### Binary cache
 
-CI pushes prebuilt bundles to Cachix so you never rebuild locally:
+CI pushes prebuilt bundles to the `aidanwright` Cachix cache so you never rebuild
+locally:
 
 ```bash
-cachix use nixy-apps
+cachix use aidanwright
 ```
 
 Or trust it declaratively in your Nix config:
 
 ```nix
 nix.settings = {
-  substituters = [ "https://nixy-apps.cachix.org" ];
-  trusted-public-keys = [ "nixy-apps.cachix.org-1:REPLACE_WITH_PUBLIC_KEY" ];
+  substituters = [ "https://aidanwright.cachix.org" ];
+  trusted-public-keys = [ "aidanwright.cachix.org-1:0SQiDDByZEpl3h36s1ItafKKMAcOoAlN3X9tApoDRog=" ];
 };
 ```
 
@@ -73,9 +74,8 @@ scripts/update-app.sh dockdoor --check  # exit 1 if an update is available
 
 ## One-time repository setup
 
-1. Create the `nixy-apps` Cachix cache and add a repo secret
-   `CACHIX_AUTH_TOKEN`. Put the cache's public key in this README and in
-   consumers' `trusted-public-keys`.
+1. Add a repo secret `CACHIX_AUTH_TOKEN` with a write token for the
+   `aidanwright` Cachix cache (reused; already trusted by the consuming config).
 2. Enable **Allow auto-merge** in repo settings and add a branch-protection rule
    on `main` requiring the `build` checks, so update PRs merge only on a green
    build.
