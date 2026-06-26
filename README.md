@@ -39,6 +39,25 @@ Or run/build directly:
 nix build github:aidanwright/nixy-apps#cryptomator
 ```
 
+### Versioning
+
+Each app set is published as a dated, immutable release (CalVer, e.g.
+`v2026.06.26`) whenever an app version changes. Every release lists the exact
+version of each app — see [Releases](https://github.com/aidanwright/nixy-apps/releases).
+
+Pick how you want to receive updates:
+
+```nix
+# Track the newest released set; `nix flake update nixy-apps` pulls the latest.
+inputs.nixy-apps.url = "github:aidanwright/nixy-apps/latest";
+
+# Or pin an exact set and bump deliberately (rollback by choosing an older tag).
+inputs.nixy-apps.url = "github:aidanwright/nixy-apps/v2026.06.26";
+```
+
+The `latest` tag only advances on real app-version releases, not on docs or CI
+commits.
+
 ### Binary cache
 
 If you are using aarch64-darwin[^1] (M series chips), prebuilt bundles are available via Cachix.
