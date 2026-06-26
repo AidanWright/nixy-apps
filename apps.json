@@ -1,0 +1,65 @@
+{
+  "claude-desktop": {
+    "appBundle": "Claude.app",
+    "archive": "zip",
+    "version": "1.15962.0",
+    "source": {
+      "type": "claude-releases",
+      "channel": "darwin/universal"
+    },
+    "platforms": {
+      "aarch64-darwin": {
+        "url": "https://downloads.claude.ai/releases/darwin/universal/1.15962.0/Claude-039543c96f820be3f47c6a5bcdb32d7278724ef1.zip",
+        "hash": "sha256-f6+rFlzfZoNK8kODal+YSVvphfymR7tzLIfA+cma4ZU="
+      },
+      "x86_64-darwin": {
+        "url": "https://downloads.claude.ai/releases/darwin/universal/1.15962.0/Claude-039543c96f820be3f47c6a5bcdb32d7278724ef1.zip",
+        "hash": "sha256-f6+rFlzfZoNK8kODal+YSVvphfymR7tzLIfA+cma4ZU="
+      }
+    }
+  },
+  "dockdoor": {
+    "appBundle": "DockDoor.app",
+    "archive": "dmg",
+    "version": "1.39.3",
+    "source": {
+      "type": "github",
+      "repo": "ejbills/DockDoor",
+      "asset": "DockDoor.dmg"
+    },
+    "platforms": {
+      "aarch64-darwin": {
+        "url": "https://github.com/ejbills/DockDoor/releases/download/1.39.3/DockDoor.dmg",
+        "hash": "sha256-/iglm5eN82r4yVCZ5bh11Arc6j3UF588wrZ8vSrIarQ="
+      },
+      "x86_64-darwin": {
+        "url": "https://github.com/ejbills/DockDoor/releases/download/1.39.3/DockDoor.dmg",
+        "hash": "sha256-/iglm5eN82r4yVCZ5bh11Arc6j3UF588wrZ8vSrIarQ="
+      }
+    }
+  },
+  "cryptomator": {
+    "appBundle": "Cryptomator.app",
+    "archive": "dmg",
+    "version": "1.19.2",
+    "source": {
+      "type": "github",
+      "repo": "cryptomator/cryptomator",
+      "assetTemplate": "Cryptomator-{version}-{arch}.dmg",
+      "archMap": {
+        "aarch64-darwin": "arm64",
+        "x86_64-darwin": "x64"
+      }
+    },
+    "platforms": {
+      "aarch64-darwin": {
+        "url": "https://github.com/cryptomator/cryptomator/releases/download/1.19.2/Cryptomator-1.19.2-arm64.dmg",
+        "hash": "sha256-6Xii2lRdiqyhGS+vba30xRvfXpvcIyoidhhAHAuDP5o="
+      },
+      "x86_64-darwin": {
+        "url": "https://github.com/cryptomator/cryptomator/releases/download/1.19.2/Cryptomator-1.19.2-x64.dmg",
+        "hash": "sha256-b5ulqm3rXvCVkm5tzX5pNdQHkf8hPbutFM0Ks3WYOhY="
+      }
+    }
+  }
+}
