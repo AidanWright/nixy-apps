@@ -33,6 +33,11 @@ fetch_release() {
       repo="$(q '.[$a].source.repo')"
       gh api "repos/$repo/releases/latest" > "$RELEASE_DATA"
       ;;
+    html)
+      local url
+      url="$(q '.[$a].source.url')"
+      curl -sf --max-time 30 "$url" > "$RELEASE_DATA"
+      ;;
     *) die "unknown source type: $SOURCE_TYPE" ;;
   esac
 }
@@ -41,6 +46,12 @@ latest_version() {
   case "$SOURCE_TYPE" in
     claude-releases) jq -r '.currentRelease' "$RELEASE_DATA" ;;
     github) jq -r '.tag_name' "$RELEASE_DATA" | sed 's/^v//' ;;
+    html)
+      local pattern
+      pattern="$(q '.[$a].source.versionPattern')"
+      PATTERN="$pattern" perl -0777 -ne \
+        'BEGIN { $re = $ENV{PATTERN} } print "$1\n" and exit if /$re/' "$RELEASE_DATA"
+      ;;
   esac
 }
 
@@ -65,6 +76,13 @@ url_for_platform() {
       fi
       jq -r --arg n "$name" \
         '.assets[] | select(.name==$n) | .browser_download_url' "$RELEASE_DATA"
+      ;;
+    html)
+      local template arch url
+      template="$(q '.[$a].source.urlTemplate')"
+      arch="$(jq -r --arg a "$APP" --arg p "$platform" '.[$a].source.archMap[$p]' "$APPS_JSON")"
+      url="${template//\{version\}/$VERSION}"
+      echo "${url//\{arch\}/$arch}"
       ;;
   esac
 }

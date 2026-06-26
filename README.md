@@ -10,6 +10,7 @@ Currently, the following apps are supported:
 | `claude-desktop` | `downloads.claude.ai` release manifest |
 | `dockdoor` | [ejbills/DockDoor](https://github.com/ejbills/DockDoor) releases |
 | `cryptomator` | [cryptomator/cryptomator](https://github.com/cryptomator/cryptomator) releases |
+| `stremio` | [stremio.com/downloads](https://www.stremio.com/downloads) (native macOS build, version scraped from the page) |
 
 Updates are automatic and hit this repo within 1 hour of upstream release.
 
