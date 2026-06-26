@@ -11,12 +11,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Only Apple Silicon is built/cached: Intel macOS runners queue for a very long
+  # time on the free tier. The x86_64-darwin packages still build on demand for
+  # anyone who needs them; they just aren't pre-cached.
   build:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [macos-latest, macos-13] # arm64, x86_64
-    runs-on: ${{ matrix.os }}
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
 
