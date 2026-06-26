@@ -5,9 +5,11 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
-
-permissions:
-  contents: write
+  # Runs after the hourly update workflow so a merged app bump gets built and
+  # cached. A GITHUB_TOKEN merge does not fire `push`, but workflow_run does.
+  workflow_run:
+    workflows: ["Update apps"]
+    types: [completed]
 
 concurrency:
   group: build-${{ github.ref }}
@@ -18,6 +20,7 @@ jobs:
   # time on the free tier. The x86_64-darwin packages still build on demand for
   # anyone who needs them; they just aren't pre-cached.
   build:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -37,58 +40,3 @@ jobs:
 
       - name: Build all apps
         run: nix build .#claude-desktop .#dockdoor .#cryptomator --print-build-logs
-
-  # Cuts a CalVer release whenever the app set changes on main (after a green
-  # build), and moves the `latest` tag that consumers track. Runs on direct
-  # pushes to main and on manual dispatch (used to mint the first release).
-  release:
-    needs: build
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
-    runs-on: ubuntu-latest
-    concurrency:
-      group: release
-      cancel-in-progress: false
-    env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Cut release when apps.json changed
-        run: |
-          set -euo pipefail
-          git fetch --tags --force
-
-          # Release only when app versions changed; manual dispatch always releases.
-          if [ "${{ github.event_name }}" = "push" ]; then
-            before="${{ github.event.before }}"
-            if [ -z "$before" ] || [ "$before" = "0000000000000000000000000000000000000000" ]; then
-              changed="$(git show --name-only --pretty=format: "${{ github.sha }}")"
-            else
-              changed="$(git diff --name-only "$before" "${{ github.sha }}")"
-            fi
-            if ! grep -qx 'apps.json' <<< "$changed"; then
-              echo "apps.json unchanged; nothing to release."
-              exit 0
-            fi
-          fi
-
-          # CalVer tag, disambiguated if several land the same day.
-          base="v$(date -u +%Y.%m.%d)"
-          tag="$base"; n=1
-          while git rev-parse "refs/tags/$tag" >/dev/null 2>&1 \
-            || gh release view "$tag" >/dev/null 2>&1; do
-            tag="$base.$n"; n=$((n + 1))
-          done
-
-          notes="$(jq -r 'to_entries | map("- **\(.key)** `\(.value.version)`") | .[]' apps.json)"
-
-          gh release create "$tag" \
-            --target "${{ github.sha }}" \
-            --title "$tag" \
-            --notes "$notes"
-
-          # Move the tracking tag consumers pin (github:.../latest).
-          git tag -f latest "${{ github.sha }}"
-          git push -f origin refs/tags/latest
