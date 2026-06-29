@@ -38,8 +38,44 @@ fetch_release() {
       url="$(q '.[$a].source.url')"
       curl -sf --max-time 30 "$url" > "$RELEASE_DATA"
       ;;
+    cdn-probe)
+      # Anchor page is advisory (used to detect new minor/major series); a fetch
+      # failure must not break probing, which still works from the shipped version.
+      local url
+      url="$(q '.[$a].source.anchorUrl')"
+      curl -sf --max-time 30 "$url" > "$RELEASE_DATA" || : >"$RELEASE_DATA"
+      ;;
     *) die "unknown source type: $SOURCE_TYPE" ;;
   esac
+}
+
+# Returns true if a built download URL exists (HEAD 2xx) for $1=version $2=arch.
+probe_exists() {
+  local template url
+  template="$(q '.[$a].source.urlTemplate')"
+  url="${template//\{version\}/$1}"
+  curl -sfI --max-time 20 "${url//\{arch\}/$2}" >/dev/null 2>&1
+}
+
+# Highest of two dotted-numeric versions.
+version_max() { printf '%s\n%s\n' "$1" "$2" | sort -V | tail -1; }
+
+# Resolves the newest published build. Anchors on the version advertised on the
+# project's site (which reflects new minor/major series) but never below the one
+# we already ship, then walks patch releases forward on the CDN to pick up builds
+# published ahead of the site. The CDN only serves recent versions, so probing
+# forward from a current anchor stays inside the served window.
+probe_latest_version() {
+  local arch pattern webver base next
+  arch="$(q '.[$a].source.probeArch')"
+  pattern="$(q '.[$a].source.anchorPattern')"
+  webver="$(PATTERN="$pattern" perl -0777 -ne \
+    'BEGIN { $re = $ENV{PATTERN} } print "$1\n" and exit if /$re/' "$RELEASE_DATA")"
+  base="$(version_max "$(q '.[$a].version')" "${webver:-0}")"
+  while next="${base%.*}.$(( ${base##*.} + 1 ))"; probe_exists "$next" "$arch"; do
+    base="$next"
+  done
+  echo "$base"
 }
 
 latest_version() {
@@ -52,6 +88,7 @@ latest_version() {
       PATTERN="$pattern" perl -0777 -ne \
         'BEGIN { $re = $ENV{PATTERN} } print "$1\n" and exit if /$re/' "$RELEASE_DATA"
       ;;
+    cdn-probe) probe_latest_version ;;
   esac
 }
 
@@ -77,7 +114,7 @@ url_for_platform() {
       jq -r --arg n "$name" \
         '.assets[] | select(.name==$n) | .browser_download_url' "$RELEASE_DATA"
       ;;
-    html)
+    html | cdn-probe)
       local template arch url
       template="$(q '.[$a].source.urlTemplate')"
       arch="$(jq -r --arg a "$APP" --arg p "$platform" '.[$a].source.archMap[$p]' "$APPS_JSON")"
