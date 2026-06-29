@@ -39,4 +39,4 @@ jobs:
           pushFilter: ${{ github.ref != 'refs/heads/main' && '.*' || '' }}
 
       - name: Build all apps
-        run: nix build .#claude-desktop .#dockdoor .#cryptomator --print-build-logs
+        run: nix build .#claude-desktop .#dockdoor .#cryptomator .#stremio --print-build-logs
