@@ -36,10 +36,19 @@ jobs:
           git fetch --tags --force
           sha="$(git rev-parse HEAD)"
 
-          # Release only when app versions changed; manual dispatch always releases.
+          # Release runs on every hourly Build, so don't re-release an unchanged
+          # commit: skip if it's already released, or if no app version changed.
           if [ "${{ github.event_name }}" = "workflow_run" ]; then
-            if ! git diff --name-only "${sha}^" "$sha" | grep -qx 'apps.json'; then
-              echo "apps.json unchanged; nothing to release."
+            released="$(git rev-parse -q --verify 'refs/tags/latest^{commit}' 2>/dev/null || true)"
+            if [ "$released" = "$sha" ]; then
+              echo "Commit $sha already released (latest points here); nothing to do."
+              exit 0
+            fi
+            old="$(git show "${sha}^:apps.json" 2>/dev/null \
+              | jq -S 'map_values(.version)' 2>/dev/null || echo '{}')"
+            new="$(jq -S 'map_values(.version)' apps.json)"
+            if [ "$old" = "$new" ]; then
+              echo "No app version changed; nothing to release."
               exit 0
             fi
           fi
