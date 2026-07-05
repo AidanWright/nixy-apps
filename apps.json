@@ -21,7 +21,7 @@
   "dockdoor": {
     "appBundle": "DockDoor.app",
     "archive": "dmg",
-    "version": "1.39.3",
+    "version": "1.39.4",
     "source": {
       "type": "github",
       "repo": "ejbills/DockDoor",
@@ -29,12 +29,12 @@
     },
     "platforms": {
       "aarch64-darwin": {
-        "url": "https://github.com/ejbills/DockDoor/releases/download/1.39.3/DockDoor.dmg",
-        "hash": "sha256-/iglm5eN82r4yVCZ5bh11Arc6j3UF588wrZ8vSrIarQ="
+        "url": "https://github.com/ejbills/DockDoor/releases/download/1.39.4/DockDoor.dmg",
+        "hash": "sha256-PsSX3/W3eXbwCh9gfp55vy7EyX2Nb8tTWNjAEw6WqxY="
       },
       "x86_64-darwin": {
-        "url": "https://github.com/ejbills/DockDoor/releases/download/1.39.3/DockDoor.dmg",
-        "hash": "sha256-/iglm5eN82r4yVCZ5bh11Arc6j3UF588wrZ8vSrIarQ="
+        "url": "https://github.com/ejbills/DockDoor/releases/download/1.39.4/DockDoor.dmg",
+        "hash": "sha256-PsSX3/W3eXbwCh9gfp55vy7EyX2Nb8tTWNjAEw6WqxY="
       }
     }
   },
