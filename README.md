@@ -1,5 +1,7 @@
 # nixy-apps
 
+[![Build](https://github.com/AidanWright/nixy-apps/actions/workflows/build.yml/badge.svg)](https://github.com/AidanWright/nixy-apps/actions/workflows/build.yml)
+
 Prebuilt macOS `.app` bundles packaged for Nix, with versions tracked
 automatically. 
 
