@@ -30,6 +30,8 @@ jobs:
           extra_nix_config: |
             experimental-features = nix-command flakes
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+            # buildDotnetModule (xray-builder) needs a relaxed sandbox on darwin.
+            sandbox = relaxed
 
       # Pushes built bundles to the cache only from main; PRs build without pushing.
       - uses: cachix/cachix-action@ad2ddac53f961de1989924296a1f236fcfbaa4fc # v15
@@ -39,4 +41,4 @@ jobs:
           pushFilter: ${{ github.ref != 'refs/heads/main' && '.*' || '' }}
 
       - name: Build all apps
-        run: nix build .#claude-desktop .#dockdoor .#cryptomator .#stremio --print-build-logs
+        run: nix build .#claude-desktop .#dockdoor .#cryptomator .#stremio .#xray-builder --print-build-logs
