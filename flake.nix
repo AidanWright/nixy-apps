@@ -22,18 +22,30 @@
           system = pkgs.stdenv.hostPlatform.system;
         };
 
+      # XRayBuilder ships no macOS binary, so unlike the .app bundles it is built
+      # from source here and cached, sparing consumers the .NET toolchain.
+      mkXrayBuilder = pkgs: pkgs.callPackage ./xray-builder/package.nix { };
+
       systemOutputs = flake-utils.lib.eachSystem [ "aarch64-darwin" "x86_64-darwin" ] (
-        system: {
-          packages = mkPackages nixpkgs.legacyPackages.${system};
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        {
+          packages = mkPackages pkgs // {
+            xray-builder = mkXrayBuilder pkgs;
+          };
         }
       );
     in
     systemOutputs
     // {
       # Exposes the apps as pkgs.darwinApps.* so consumers can apply one overlay
-      # and keep referencing pkgs.darwinApps.<name> unchanged.
+      # and keep referencing pkgs.darwinApps.<name> unchanged. XRayBuilder is a
+      # CLI rather than a bundle, so it lands at the top level as pkgs.xray-builder.
       overlays.default = final: _prev: {
         darwinApps = mkPackages final;
+        xray-builder = mkXrayBuilder final;
       };
     };
 }

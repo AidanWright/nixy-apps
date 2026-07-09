@@ -16,6 +16,20 @@ Updates are automatic and hit this repo within 1 hour of upstream release.
 
 Built for `aarch64-darwin` and `x86_64-darwin`.
 
+### Other tools
+
+The following macOS tools ship no upstream macOS binary, so this flake builds them
+from source and caches them the same way. They live at the top level (e.g.
+`pkgs.xray-builder`) rather than under `darwinApps.*`:
+
+| Tool | Source |
+| --- | --- |
+| `xray-builder` | [Ephemerality/xray-builder.gui](https://github.com/Ephemerality/xray-builder.gui) — build X-Ray files for sideloaded Kindle books |
+
+Unlike the bundles, these are pinned to a release rather than auto-updated. Bump
+one by editing its `version`/`src` in `<tool>/package.nix` and regenerating
+`<tool>/deps.json` (`nix build .#<tool>.fetch-deps && ./result <tool>/deps.json`).
+
 ## Usage
 
 Add the flake as an input and apply the overlay. Every app is then available as
@@ -32,6 +46,9 @@ Add the flake as an input and apply the overlay. Every app is then available as
   # packages are available via the overlay darwinApps
   environment.systemPackages = [ pkgs.darwinApps.dockdoor ];
   home.packages = [ pkgs.darwinApps.claude-desktop pkgs.darwinApps.cryptomator ];
+
+  # "other tools" are top-level rather than under darwinApps
+  environment.systemPackages = [ pkgs.xray-builder ];
 ```
 
 Or run/build directly:
