@@ -16,11 +16,15 @@ buildDotnetModule (finalAttrs: {
     hash = "sha256-BlrdiSSWaSpM8SKae9utn0XNVzUNW4fu3r84Htg8XqQ=";
   };
 
-  # Retarget net6.0 (EOL/insecure in nixpkgs) to net8.0, and drop in a module
-  # initializer that resolves Amazon.IonDotnet at startup (see the .cs comment).
+  # Retarget net6.0 (EOL/insecure in nixpkgs) to net8.0; drop in a module
+  # initializer that resolves Amazon.IonDotnet at startup (see the .cs comment);
+  # and root the writable dirs (ext/dmp/output) at the cwd instead of the
+  # read-only store the exe lives in. Bundled dist/ reads keep using BaseDirectory.
   postPatch = ''
     find . -name '*.csproj' -exec sed -i 's#<TargetFramework>net6.0</TargetFramework>#<TargetFramework>net8.0</TargetFramework>#g' {} +
     cp ${./IonDotnetResolver.cs} XRayBuilder.Console/IonDotnetResolver.cs
+    sed -i 's#_baseDirectory = AppDomain.CurrentDomain.BaseDirectory;#_baseDirectory = Environment.CurrentDirectory;#' XRayBuilder.Core/src/Logic/DirectoryService.cs
+    sed -i 's#$"{AppDomain.CurrentDomain.BaseDirectory ?? Environment.CurrentDirectory}out"#$"{Environment.CurrentDirectory}/out"#' XRayBuilder.Console/Command/CommandXRay.cs
   '';
 
   projectFile = "XRayBuilder.Console/XRayBuilder.Console.csproj";
