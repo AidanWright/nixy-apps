@@ -16,10 +16,11 @@ buildDotnetModule (finalAttrs: {
     hash = "sha256-BlrdiSSWaSpM8SKae9utn0XNVzUNW4fu3r84Htg8XqQ=";
   };
 
-  # Upstream targets net6.0, which nixpkgs flags as EOL/insecure. Retarget the
-  # build graph to the supported net8.0 runtime.
+  # Retarget net6.0 (EOL/insecure in nixpkgs) to net8.0, and drop in a module
+  # initializer that resolves Amazon.IonDotnet at startup (see the .cs comment).
   postPatch = ''
     find . -name '*.csproj' -exec sed -i 's#<TargetFramework>net6.0</TargetFramework>#<TargetFramework>net8.0</TargetFramework>#g' {} +
+    cp ${./IonDotnetResolver.cs} XRayBuilder.Console/IonDotnetResolver.cs
   '';
 
   projectFile = "XRayBuilder.Console/XRayBuilder.Console.csproj";
@@ -30,11 +31,11 @@ buildDotnetModule (finalAttrs: {
 
   executables = [ "XRayBuilder.Console" ];
 
-  # dotnet publish drops the HintPath'd Amazon.IonDotnet DLL; copy it in under
-  # its assembly name so the KFX reader resolves it.
+  # dotnet publish drops the HintPath'd Amazon.IonDotnet DLL; ship it so the
+  # startup resolver can load it by path.
   postInstall = ''
     cp lib/Ephemerality.Unpack/Amazon.IonDotnet.Ephemerality.dll \
-      "$out/lib/xray-builder/Amazon.IonDotnet.dll"
+      "$out/lib/xray-builder/Amazon.IonDotnet.Ephemerality.dll"
   '';
 
   meta = {
