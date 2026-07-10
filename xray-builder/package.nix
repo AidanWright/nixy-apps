@@ -30,6 +30,13 @@ buildDotnetModule (finalAttrs: {
 
   executables = [ "XRayBuilder.Console" ];
 
+  # dotnet publish drops the HintPath'd Amazon.IonDotnet DLL; copy it in under
+  # its assembly name so the KFX reader resolves it.
+  postInstall = ''
+    cp lib/Ephemerality.Unpack/Amazon.IonDotnet.Ephemerality.dll \
+      "$out/lib/xray-builder/Amazon.IonDotnet.dll"
+  '';
+
   meta = {
     description = "Create X-Ray files for Amazon Kindle from Goodreads data";
     homepage = "https://github.com/Ephemerality/xray-builder.gui";
