@@ -2,19 +2,19 @@
   "claude-desktop": {
     "appBundle": "Claude.app",
     "archive": "zip",
-    "version": "1.49585.0",
+    "version": "1.52386.0",
     "source": {
       "type": "claude-releases",
       "channel": "darwin/universal"
     },
     "platforms": {
       "aarch64-darwin": {
-        "url": "https://downloads.claude.ai/releases/darwin/universal/1.49585.0/Claude-41ad1dff5275eedc8af25989f59f33c5efe14063.zip",
-        "hash": "sha256-fVJGNRT1Ba654W+opSpv8lvRPIOVQJi8L4aNOr4HkvQ="
+        "url": "https://downloads.claude.ai/releases/darwin/universal/1.52386.0/Claude-1003ca8d443708006c167ffbd0f9695343643af1.zip",
+        "hash": "sha256-mjVnev2wLUsKU6pdLDsu5Mlr+/xG7pSg+qBq8hxpq8A="
       },
       "x86_64-darwin": {
-        "url": "https://downloads.claude.ai/releases/darwin/universal/1.49585.0/Claude-41ad1dff5275eedc8af25989f59f33c5efe14063.zip",
-        "hash": "sha256-fVJGNRT1Ba654W+opSpv8lvRPIOVQJi8L4aNOr4HkvQ="
+        "url": "https://downloads.claude.ai/releases/darwin/universal/1.52386.0/Claude-1003ca8d443708006c167ffbd0f9695343643af1.zip",
+        "hash": "sha256-mjVnev2wLUsKU6pdLDsu5Mlr+/xG7pSg+qBq8hxpq8A="
       }
     }
   },
