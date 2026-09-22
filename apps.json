@@ -65,7 +65,7 @@
   "stremio": {
     "appBundle": "Stremio.app",
     "archive": "dmg",
-    "version": "5.1.27",
+    "version": "5.1.28",
     "source": {
       "type": "cdn-probe",
       "anchorUrl": "https://www.stremio.com/downloads",
@@ -79,12 +79,12 @@
     },
     "platforms": {
       "aarch64-darwin": {
-        "url": "https://dl.strem.io/stremio-shell-macos/v5.1.27/Stremio_arm64.dmg",
-        "hash": "sha256-7BNk5DDa2oMFYmDZTlwNQ66rSWywJJeYB3llmET6f2k="
+        "url": "https://dl.strem.io/stremio-shell-macos/v5.1.28/Stremio_arm64.dmg",
+        "hash": "sha256-zRlj2/DCaQDYiA9ECi5+DDhByPWLfiPmSR+fZtBm/T0="
       },
       "x86_64-darwin": {
-        "url": "https://dl.strem.io/stremio-shell-macos/v5.1.27/Stremio_x64.dmg",
-        "hash": "sha256-FNDqLQtKO8OevuKXQmJ8IBtfPKNJO4dsn1bcj61ZdSg="
+        "url": "https://dl.strem.io/stremio-shell-macos/v5.1.28/Stremio_x64.dmg",
+        "hash": "sha256-IRDTmUR+i61WcJa3Jij+P9vX4cUXzZaoTuvd9NYwLQw="
       }
     }
   }
