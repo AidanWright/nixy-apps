@@ -41,7 +41,7 @@
   "cryptomator": {
     "appBundle": "Cryptomator.app",
     "archive": "dmg",
-    "version": "1.19.5",
+    "version": "1.19.6",
     "source": {
       "type": "github",
       "repo": "cryptomator/cryptomator",
@@ -53,12 +53,12 @@
     },
     "platforms": {
       "aarch64-darwin": {
-        "url": "https://github.com/cryptomator/cryptomator/releases/download/1.19.5/Cryptomator-1.19.5-arm64.dmg",
-        "hash": "sha256-DfKEIBefY6OptEwiEpB8WQt82Sh1lw9UoWlg2yneO+s="
+        "url": "https://github.com/cryptomator/cryptomator/releases/download/1.19.6/Cryptomator-1.19.6-arm64.dmg",
+        "hash": "sha256-/fyO9QsQusoQeLep7fQE4zA2PIo6QP2in4bdXToKCwI="
       },
       "x86_64-darwin": {
-        "url": "https://github.com/cryptomator/cryptomator/releases/download/1.19.5/Cryptomator-1.19.5-x64.dmg",
-        "hash": "sha256-nbkg6EdgEOHyrT/BhqcfOrFjUWzK8dSU+mFukgz8BoI="
+        "url": "https://github.com/cryptomator/cryptomator/releases/download/1.19.6/Cryptomator-1.19.6-x64.dmg",
+        "hash": "sha256-hO6rQT8LOB7Fx9WES3msj8gKvA5SZqOjzzpc5y4c+ko="
       }
     }
   },
